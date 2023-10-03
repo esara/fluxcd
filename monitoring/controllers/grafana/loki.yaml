@@ -1,0 +1,23 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: loki
+  namespace: monitoring
+spec:
+  dependsOn:
+    - name: kube-prometheus-stack
+  interval: 1h
+  chart:
+    spec:
+      version: 2.9.11
+      chart: loki-stack
+      sourceRef:
+        kind: HelmRepository
+        name: grafana-charts
+  values:
+    serviceAccount:
+      create: false
+    grafana:
+      sidecar:
+        datasources:
+          enabled: false
