@@ -1,0 +1,18 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: causely-backend
+  namespace: causely
+spec:
+  dependsOn:
+  - name: cert-manager
+    namespace: cert-manager
+  interval: 1h
+  chart:
+    spec:
+      chart: helm/backend
+      version: 0.1.0
+      sourceRef:
+        kind: GitRepository
+        name: causely
+        namespace: flux-system

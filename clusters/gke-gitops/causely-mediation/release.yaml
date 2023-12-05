@@ -1,0 +1,15 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: causely
+  namespace: causely-mediation
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: causely
+      version: 0.0.19-505-g20551e799bdae2aa
+      sourceRef:
+        kind: HelmRepository
+        name: causely
+        namespace: causely-mediation

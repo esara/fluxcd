@@ -1,0 +1,9 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: causely
+  namespace: causely-mediation
+spec:
+  interval: 12h
+  type: oci
+  url: oci://quay.io/causely
