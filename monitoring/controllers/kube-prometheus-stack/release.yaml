@@ -33,6 +33,12 @@ spec:
           editable: false
           type: tempo
           url: http://tempo.monitoring.svc.cluster.local:3100
+          jsonData:
+            httpMethod: GET
+            serviceMap:
+              datasourceUid: 'prometheus'
+            nodeGraph:
+              enabled: true
           version: 1
     kubeControllerManager:
       enabled: false
@@ -44,6 +50,7 @@ spec:
       enabled: false
     prometheus:
       prometheusSpec:
+        enableRemoteWriteReceiver: true
         podMonitorSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
   postRenderers:
