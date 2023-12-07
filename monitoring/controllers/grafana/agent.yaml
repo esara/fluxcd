@@ -1,0 +1,90 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: grafana-agent
+  namespace: monitoring
+spec:
+  dependsOn:
+    - name: tempo
+  interval: 1h
+  chart:
+    spec:
+      version: 0.28.0
+      chart: grafana-agent
+      sourceRef:
+        kind: HelmRepository
+        name: grafana-charts
+  values:
+    controller:
+      type: deployment
+    agent:
+      extraPorts:
+        - name: "grpc"
+          port: 4317
+          targetPort: 4317
+        - name: "http"
+          port: 4318
+          targetPort: 4318
+      configMap:
+        content: |
+          otelcol.exporter.otlp "tempo" {
+            client {
+              endpoint = "tempo.monitoring:4317"
+              tls {
+                insecure = true
+              }
+            }
+          }
+
+          prometheus.remote_write "default" {
+            endpoint {
+              url = "http://kube-prometheus-stack-prometheus.monitoring:9090/api/v1/write"
+            }
+          }
+
+          otelcol.exporter.prometheus "default" {
+            forward_to = [prometheus.remote_write.default.receiver]
+          }
+
+          otelcol.processor.batch "default" {
+            output {
+              metrics = [otelcol.exporter.prometheus.default.input]
+              traces  = [otelcol.exporter.otlp.tempo.input]
+            }
+          }
+          
+          otelcol.processor.k8sattributes "default" {
+            extract {
+              label {
+                from = "pod"
+              }
+          
+              metadata = [
+                "k8s.namespace.name",
+                "k8s.pod.name",
+                "k8s.pod.uid",
+                "k8s.deployment.name",
+                "k8s.node.name",
+                "k8s.pod.start_time",
+              ]
+            }
+    
+            output {
+              traces = [otelcol.processor.batch.default.input]
+            }
+          }
+
+          otelcol.receiver.otlp "default" {
+            grpc {
+              endpoint = "0.0.0.0:4317"
+            }
+            http {
+              endpoint = "0.0.0.0:4318"
+            }
+
+            output {
+              metrics = [otelcol.processor.batch.default.input]
+              traces  = [otelcol.processor.k8sattributes.default.input]
+            }
+          }
+    
