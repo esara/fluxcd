@@ -31,3 +31,15 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: istio
+  values:
+    meshConfig:
+      defaultProviders:
+        metrics:
+          - "prometheus"
+        tracing:
+          - "opentelemetry"
+      extensionProviders:
+        - name: opentelemetry
+          opentelemetry:
+            service: "grafana-agent.monitoring.svc.cluster.local"
+            port: "4317"
