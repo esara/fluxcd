@@ -22,12 +22,12 @@ spec:
       enabled: false
     grafana:
       additionalDataSources:
-        - name: Loki
-          access: proxy
-          editable: false
-          type: loki
-          url: http://loki.monitoring.svc.cluster.local:3100
-          version: 1
+#        - name: Loki
+#          access: proxy
+#          editable: false
+#          type: loki
+#          url: http://loki.monitoring.svc.cluster.local:3100
+#          version: 1
         - name: Tempo
           access: proxy
           editable: false
@@ -47,6 +47,8 @@ spec:
     kubeProxy:
       enabled: false
     kubeScheduler:
+      enabled: false
+    nodeExporter:
       enabled: false
     prometheus:
       prometheusSpec:

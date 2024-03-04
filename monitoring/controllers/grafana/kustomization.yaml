@@ -3,6 +3,6 @@ kind: Kustomization
 
 resources:
 - agent.yaml
-- loki.yaml
+#- loki.yaml
 - tempo.yaml
 - repository.yaml
