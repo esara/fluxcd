@@ -9,7 +9,7 @@ spec:
   interval: 1h
   chart:
     spec:
-      version: 1.7.1
+      version: 1.7.2
       chart: tempo
       sourceRef:
         kind: HelmRepository

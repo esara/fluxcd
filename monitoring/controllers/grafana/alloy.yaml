@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
-  name: grafana-agent
+  name: alloy
   namespace: monitoring
 spec:
   dependsOn:
@@ -9,15 +9,16 @@ spec:
   interval: 1h
   chart:
     spec:
-      version: 0.28.0
-      chart: grafana-agent
+      version: 0.1.1
+      chart: alloy
       sourceRef:
         kind: HelmRepository
         name: grafana-charts
   values:
     controller:
       type: deployment
-    agent:
+    alloy:
+      stabilityLevel: public-preview
       extraPorts:
         - name: "grpc"
           port: 4317
@@ -52,7 +53,7 @@ spec:
               traces  = [otelcol.exporter.otlp.tempo.input]
             }
           }
-          
+
           otelcol.processor.k8sattributes "default" {
             extract {
               label {
@@ -68,9 +69,9 @@ spec:
                 "k8s.pod.start_time",
               ]
             }
-    
+
             output {
-              traces = [otelcol.processor.batch.default.input]
+              traces  = [otelcol.processor.batch.default.input]
             }
           }
 
@@ -84,7 +85,42 @@ spec:
 
             output {
               metrics = [otelcol.processor.batch.default.input]
-              traces  = [otelcol.processor.k8sattributes.default.input]
+              traces = [otelcol.processor.k8sattributes.default.input]
             }
           }
-    
+
+          pyroscope.write "grafana" {
+            // Send metrics to a locally running Pyroscope instance.
+            endpoint {
+              url = "http://pyroscope.monitoring:4040"
+            }
+          }
+
+          pyroscope.scrape "causely" {
+            targets    = [
+              {"__address__" = "api.causely:8082", "app"="api"},
+              {"__address__" = "analysis.causely:8082", "app"="analysis"},
+              {"__address__" = "gateway.causely:8082", "app"="gateway"},
+            ]
+            forward_to = [pyroscope.write.grafana.receiver]
+            profiling_config {
+              profile.memory {
+                enabled = true
+              }
+              profile.block {
+                enabled = true
+              }
+              profile.goroutine {
+                enabled = true
+              }
+              profile.mutex {
+                enabled = true
+              }
+              profile.process_cpu {
+                enabled = true
+              }
+              profile.fgprof {
+                enabled = false
+              }
+            }
+          }

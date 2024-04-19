@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
-  name: loki
+  name: pyroscope
   namespace: monitoring
 spec:
   dependsOn:
@@ -9,15 +9,13 @@ spec:
   interval: 1h
   chart:
     spec:
-      version: 2.10.2
-      chart: loki-stack
+      version: 1.5.0
+      chart: pyroscope
       sourceRef:
         kind: HelmRepository
         name: grafana-charts
   values:
     serviceAccount:
       create: false
-    grafana:
-      sidecar:
-        datasources:
-          enabled: false
+    agent:
+      enabled: false

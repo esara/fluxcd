@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: kube-prometheus-stack
-      version: 54.2.2
+      version: 57.1.1
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
@@ -27,6 +27,12 @@ spec:
           editable: false
           type: loki
           url: http://loki.monitoring.svc.cluster.local:3100
+          version: 1
+        - name: Pyroscope
+          access: proxy
+          editable: false
+          type: grafana-pyroscope-datasource
+          url: http://pyroscope.monitoring.svc.cluster.local:4040
           version: 1
         - name: Tempo
           access: proxy
