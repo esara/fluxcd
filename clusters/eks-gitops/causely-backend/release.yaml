@@ -1,4 +1,4 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta2
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: causely-backend
@@ -10,8 +10,8 @@ spec:
   interval: 1h
   chart:
     spec:
-      chart: helm/backend
-      version: 0.1.0
+      chart: backend
+      version: 0.0.38-0-g97c4863c949c1a69
       sourceRef:
         kind: GitRepository
         name: causely
