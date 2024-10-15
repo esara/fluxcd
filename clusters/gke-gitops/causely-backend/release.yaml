@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: helm/backend
-      version: 0.0.36-14-gcc9b04d4abc23873-dirty # Replace
+      version: v1.0.77-0-ga003eadf8f7d9cdb
       sourceRef:
         kind: GitRepository
         name: causely

@@ -11,7 +11,7 @@ spec:
   chart:
     spec:
       chart: backend
-      version: 0.0.38-0-g97c4863c949c1a69
+      version: v1.0.77-0-ga003eadf8f7d9cdb
       sourceRef:
         kind: GitRepository
         name: causely

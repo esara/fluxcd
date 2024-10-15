@@ -7,4 +7,4 @@ resources:
 - repository.yaml
 - https://raw.githubusercontent.com/istio/istio/master/samples/addons/prometheus.yaml
 - https://raw.githubusercontent.com/istio/istio/master/samples/addons/extras/prometheus-operator.yaml
-- https://raw.githubusercontent.com/istio/istio/master/samples/addons/kiali.yaml
+- https://raw.githubusercontent.com/istio/istio/1.22.1/samples/addons/kiali.yaml
