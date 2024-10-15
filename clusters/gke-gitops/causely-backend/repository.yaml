@@ -1,17 +1,10 @@
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: GitRepository
+kind: HelmRepository
 metadata:
-  name: causely
-  namespace: flux-system
+  name: production-causely
+  namespace: causely
 spec:
+  provider: gcp
   interval: 12h
-  url: ssh://git@github.com/Causely/causely
-  secretRef:
-    name: flux-system
-  ref:
-    branch: main
-  ignore: |-
-    # exclude all
-    /*
-    # include helm/backend directory
-    !/helm
+  type: oci
+  url: oci://us-docker.pkg.dev/production-causely/production

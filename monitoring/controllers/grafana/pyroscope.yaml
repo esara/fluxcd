@@ -9,7 +9,7 @@ spec:
   interval: 1h
   chart:
     spec:
-      version: 1.6.0
+      version: 1.14.1
       chart: pyroscope
       sourceRef:
         kind: HelmRepository
@@ -17,5 +17,7 @@ spec:
   values:
     serviceAccount:
       create: false
+    alloy:
+      enabled: false
     agent:
       enabled: false

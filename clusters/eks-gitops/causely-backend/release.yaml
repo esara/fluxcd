@@ -11,8 +11,8 @@ spec:
   chart:
     spec:
       chart: backend
-      version: 0.0.38-0-g97c4863c949c1a69
+      version: v1.0.92-0-g032e39faaf05c408
       sourceRef:
-        kind: GitRepository
-        name: causely
-        namespace: flux-system
+        kind: HelmRepository
+        name: production-causely
+        namespace: causely

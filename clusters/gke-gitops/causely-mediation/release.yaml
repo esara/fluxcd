@@ -8,8 +8,21 @@ spec:
   chart:
     spec:
       chart: causely
-      version: 0.0.38-0-g97c4863c949c1a69
+      version: v1.0.92-0-g032e39faaf05c408
       sourceRef:
         kind: HelmRepository
         name: causely
         namespace: causely-mediation
+  values:
+    global:
+      cluster_name: production
+
+    image:
+      tag: v1.0.92-0-g032e39faaf05c408
+
+    serviceMonitor:
+      enabled: true
+
+    mediator:
+      gateway:
+        token: "ABCSDFGHIJKLMNOPQRSTUVWXYZ"

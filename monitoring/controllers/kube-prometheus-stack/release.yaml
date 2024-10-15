@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: kube-prometheus-stack
-      version: 59.1.0
+      version: 77.10.0
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
@@ -18,9 +18,9 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
-    alertmanager:
-      enabled: false
     grafana:
+      persistence:
+        enabled: true
       additionalDataSources:
         - name: Loki
           access: proxy
@@ -38,7 +38,7 @@ spec:
           access: proxy
           editable: false
           type: tempo
-          url: http://tempo.monitoring.svc.cluster.local:3100
+          url: http://tempo.monitoring.svc.cluster.local:3200
           jsonData:
             httpMethod: GET
             serviceMap:
@@ -56,9 +56,21 @@ spec:
       enabled: false
     prometheus:
       prometheusSpec:
+        enableOTLPReceiver: true
         enableRemoteWriteReceiver: true
         podMonitorSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
+        tsdb:
+          outOfOrderTimeWindow: 30m
+        resources:
+          requests:
+            memory: 8192Mi
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              resources:
+                requests:
+                  storage: 50Gi
   postRenderers:
     - kustomize:
         patches:

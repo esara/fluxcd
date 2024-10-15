@@ -4,12 +4,15 @@ metadata:
   name: causely-backend
   namespace: causely
 spec:
+  dependsOn:
+  - name: cert-manager
+    namespace: cert-manager
   interval: 1h
   chart:
     spec:
-      chart: helm/backend
-      version: 0.0.36-14-gcc9b04d4abc23873-dirty # Replace
+      chart: backend
+      version: v1.0.92-0-g032e39faaf05c408
       sourceRef:
-        kind: GitRepository
-        name: causely
-        namespace: flux-system
+        kind: HelmRepository
+        name: production-causely
+        namespace: causely

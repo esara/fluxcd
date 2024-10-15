@@ -9,15 +9,45 @@ spec:
   interval: 1h
   chart:
     spec:
-      version: 2.10.2
-      chart: loki-stack
+      version: 6.40.0
+      chart: loki
       sourceRef:
         kind: HelmRepository
         name: grafana-charts
   values:
+    deploymentMode: SingleBinary
+    loki:
+      auth_enabled: false
+      commonConfig:
+        replication_factor: 1
+      storage:
+        type: 'filesystem'
+      schemaConfig:
+        configs:
+          - from: "2024-01-01"
+            store: tsdb
+            index:
+              prefix: loki_index_
+              period: 24h
+            object_store: filesystem # we're storing on filesystem so there's no real persistence here.
+            schema: v13
+    singleBinary:
+      replicas: 1
+    read:
+      replicas: 0
+    backend:
+      replicas: 0
+    write:
+      replicas: 0
     serviceAccount:
       create: false
-    grafana:
-      sidecar:
-        datasources:
-          enabled: false
+    lokiCanary:
+      enabled: false
+    gateway:
+      enabled: false
+    test:
+      enabled: false
+    chunksCache:
+      enabled: false
+    resultsCache:
+      enabled: false
